@@ -21,7 +21,7 @@ public class UsersApi {
     @Autowired
     private RestTemplate restTemplate;
 
-    public CompletableFuture<List<User>> getUsers() {
+    public List<User> getUsers() {
         HttpHeaders httpHeaders = new HttpHeaders();
         final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
         ParameterizedTypeReference<List<User>> schemaType = new ParameterizedTypeReference<List<User>>() {
@@ -33,14 +33,14 @@ public class UsersApi {
             ResponseEntity<List<User>> res =
                     restTemplate.exchange(userServiceEndpoint, HttpMethod.GET, entity, schemaType);
             users = res.getBody();
-            return CompletableFuture.completedFuture(users);
+            return users;
         } catch (RestClientException exception) {
             throw exception;
         }
 
     }
 
-    public CompletableFuture<List<User>> getUserByCity(String city) {
+    public List<User> getUserByCity(String city) {
         HttpHeaders httpHeaders = new HttpHeaders();
         final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
         ParameterizedTypeReference<List<User>> schemaType = new ParameterizedTypeReference<List<User>>() {
@@ -51,7 +51,7 @@ public class UsersApi {
             ResponseEntity<List<User>> res =
                     restTemplate.exchange(cityUsersEndpoint, HttpMethod.GET, entity, schemaType);
             users = res.getBody();
-            return CompletableFuture.completedFuture(users);
+            return users;
         } catch (RestClientException exception) {
             throw exception;
         }

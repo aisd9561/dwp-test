@@ -27,6 +27,7 @@ public class UsersApiTests {
     @InjectMocks
     private UsersApi usersApi;
 
+
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
@@ -45,7 +46,7 @@ public class UsersApiTests {
                 Mockito.any(ParameterizedTypeReference.class),Mockito.any(User[].class))
         ).thenReturn(mockResponse);
         //Act
-        List<User> res = usersApi.getUsers().join();
+        List<User> res = usersApi.getUsers();
 
         //Assert
         Assertions.assertEquals(res, users);
@@ -67,7 +68,7 @@ public class UsersApiTests {
         ).thenThrow(RestClientException.class);
         //Act && Assert
         assertThrows(RestClientException.class,() -> {
-            usersApi.getUsers().join();
+            usersApi.getUsers();
         });
 
 
@@ -86,7 +87,7 @@ public class UsersApiTests {
                 Mockito.any(ParameterizedTypeReference.class),Mockito.any(User[].class))
         ).thenReturn(mockResponse);
         //Act
-        List<User> res = usersApi.getUserByCity("city").join();
+        List<User> res = usersApi.getUserByCity("city");
 
         //Assert
         Assertions.assertEquals(res, users);
@@ -110,7 +111,7 @@ public class UsersApiTests {
         ).thenThrow(RestClientException.class);
         //Act && Assert
         assertThrows(RestClientException.class,() -> {
-            usersApi.getUsers().join();
+            usersApi.getUsers();
         });
 
 

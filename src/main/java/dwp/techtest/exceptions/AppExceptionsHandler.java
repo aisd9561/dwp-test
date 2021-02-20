@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.context.request.WebRequest;
 
 
 @ControllerAdvice
@@ -24,6 +23,7 @@ public class AppExceptionsHandler {
         ApiError apiError = new ApiError(e.getStatusCode(), ErrorMessages.USER_SERVICE_ERROR,e.getResponseBodyAsString());
         return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
+
 
 
 }

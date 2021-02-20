@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableAsync
 public class TechTestApplication {
 
 	@Bean
