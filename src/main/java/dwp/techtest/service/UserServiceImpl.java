@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsersFromLocation(String city,Location location,int maxDistance) {
         List<User> usersInCity = usersApi.getUserByCity(city);
         List<User> allUsers = usersApi.getUsers();
-        if(usersInCity.isEmpty() && allUsers.isEmpty() || usersInCity == null && allUsers == null){
+        if(usersInCity == null && allUsers == null || usersInCity.isEmpty() && allUsers.isEmpty() ){
             return null;
         }
         List<User> usersWithinDistance = getUsersWithinCity(allUsers,location,maxDistance);
@@ -36,13 +36,12 @@ public class UserServiceImpl implements UserService {
 
     private List<User> getUsersWithinCity(List<User> allUsers, Location city ,int maxDistance ){
 
-        if(allUsers.isEmpty()){
+        if( allUsers == null || allUsers.isEmpty()){
             return null;
         }
         List<User> usersWithinDistance = new ArrayList<>();
         for (User user : allUsers) {
             Location userLoc = new Location( user.getLatitude(),user.getLongitude());
-            System.out.println(userLoc);
             Double distance = geoLocation.getDistance(city,userLoc);
             if(distance == null){
                 continue;
@@ -56,6 +55,12 @@ public class UserServiceImpl implements UserService {
     }
 
     private List<User> removeDuplicates(List<User> list1, List<User> list2){
+        if(list1 == null ){
+            return list2;
+        }
+        if (list2 == null){
+            return list1;
+        }
         List<User> filteredList = new ArrayList<>(
                 Stream.of(list1, list2)
                         .flatMap(List::stream)
