@@ -8,11 +8,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeoLocation {
 
-    public static Double getDistance(Location start , Location destination) {
+
+    public Double getDistance(Location start , Location destination) {
         GeodeticCalculator gc = new GeodeticCalculator();
-        gc.setStartingGeographicPoint(start.getLongitude(),start.getLatitude());
-        gc.setDestinationGeographicPoint(destination.getLongitude(), destination.getLatitude());
-        double distance = gc.getOrthodromicDistance();
+        double distance = 0.00;
+        try {
+            gc.setStartingGeographicPoint(start.getLongitude(),start.getLatitude());
+            gc.setDestinationGeographicPoint(destination.getLongitude(), destination.getLatitude());
+            distance = gc.getOrthodromicDistance();
+        }catch(Exception e){
+            System.out.println("Unable to calculate distance. \n Error Message: " + e.getMessage());
+            return null;
+        }
+
         double distanceInMiles = convertMetersToMiles(distance);
         return distanceInMiles;
 
