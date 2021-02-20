@@ -19,20 +19,12 @@ import java.util.List;
 
 public class GeoLocationTests {
 
-    private Location london;
-
-    @BeforeEach
-    void setup(){
-        london = new Location(Constants.LONDON_LATITUDE,Constants.LONDON_LONGITUDE);
-
-    }
-
     @Test
     public void testGetDistance_WhenStartingLocationAndDestinationIsOverFiftyMiles(){
         //Arrange
         Location destination = new Location( 51.803004,-1.322074);
         //Act
-        double actual = GeoLocation.getDistance(london,destination);
+        double actual = GeoLocation.getDistance(Constants.LONDON,destination);
         //Assert
         Assertions.assertTrue(actual > 50);
 
@@ -43,7 +35,7 @@ public class GeoLocationTests {
         //Arrange
         Location destination = new Location( 51.5762232,-1.0603214);
         //Act
-        double actual = GeoLocation.getDistance(london,destination);
+        double actual = GeoLocation.getDistance(Constants.LONDON,destination);
         //Assert
         Assertions.assertTrue(actual < 50);
 
@@ -53,7 +45,7 @@ public class GeoLocationTests {
     public void testGetDistance_WhenStartingLocationAndDestinationIsTheSame(){
 
         //Act
-        double actual = GeoLocation.getDistance(london,london);
+        double actual = GeoLocation.getDistance(Constants.LONDON,Constants.LONDON);
         //Assert
         double expected = 0.0;
         Assertions.assertEquals(actual, expected);
