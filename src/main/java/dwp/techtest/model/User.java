@@ -16,11 +16,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class User {
 
-    public User() {
-    }
-    public User(Long id) {
-        this.id = id;
-    }
+   
 
     /**
      * @param firstName
