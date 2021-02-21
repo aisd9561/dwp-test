@@ -13,6 +13,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -32,20 +33,20 @@ public class UsersApiTests {
 
 
     @BeforeEach
-    void setup(){
+    void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testGetUsers_OnSuccessfulResponse(){
+    public void testGetUsers_OnSuccessfulResponse() {
         //Arrange
         List<User> users = new ArrayList<>();
         users.add(userInLondon);
-        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>(users,HttpStatus.OK);
+        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>(users, HttpStatus.OK);
 
         Mockito.when(restTemplate.exchange(
-                Mockito.anyString(),Mockito.any(),Mockito.any(),
-                Mockito.any(ParameterizedTypeReference.class),Mockito.any(User[].class))
+                Mockito.anyString(), Mockito.any(), Mockito.any(),
+                Mockito.any(ParameterizedTypeReference.class), Mockito.any(User[].class))
         ).thenReturn(mockResponse);
         //Act
         List<User> res = usersApi.getUsers();
@@ -56,35 +57,36 @@ public class UsersApiTests {
     }
 
     @Test
-    public void testGetUsers_OnUnsuccessfulResponse(){
+    public void testGetUsers_OnUnsuccessfulResponse() {
         //Arrange
         List<User> users = new ArrayList<>();
         users.add(userInLondon);
 
-        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>((List<User>) null,HttpStatus.INTERNAL_SERVER_ERROR);
+        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>((List<User>) null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         Mockito.when(restTemplate.exchange(
-                Mockito.anyString(),Mockito.any(),Mockito.any(),
-                Mockito.any(ParameterizedTypeReference.class),Mockito.any(User[].class))
-        ).thenThrow(RestClientException.class);
+                Mockito.anyString(), Mockito.any(), Mockito.any(),
+                Mockito.any(ParameterizedTypeReference.class), Mockito.any(User[].class))
+        ).thenThrow(RestClientResponseException.class);
         //Act && Assert
-        assertThrows(RestClientException.class,() -> {
+        assertThrows(RestClientResponseException.class, () -> {
             usersApi.getUsers();
         });
 
 
     }
+
     @Test
-    public void testGetUsersByCity_OnSuccessfulResponse(){
+    public void testGetUsersByCity_OnSuccessfulResponse() {
         //Arrange
         List<User> users = new ArrayList<>();
         users.add(userInLondon);
 
-        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>(users,HttpStatus.INTERNAL_SERVER_ERROR);
+        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>(users, HttpStatus.INTERNAL_SERVER_ERROR);
 
         Mockito.when(restTemplate.exchange(
-                Mockito.anyString(),Mockito.any(),Mockito.any(),
-                Mockito.any(ParameterizedTypeReference.class),Mockito.any(User[].class))
+                Mockito.anyString(), Mockito.any(), Mockito.any(),
+                Mockito.any(ParameterizedTypeReference.class), Mockito.any(User[].class))
         ).thenReturn(mockResponse);
         //Act
         List<User> res = usersApi.getUserByCity("city");
@@ -93,24 +95,23 @@ public class UsersApiTests {
         Assertions.assertEquals(res, users);
 
 
-
     }
 
     @Test
-    public void testGetUsersByCity_OnUnsuccessfulResponse(){
+    public void testGetUsersByCity_OnUnsuccessfulResponse() {
         //Arrange
         List<User> users = new ArrayList<>();
         users.add(userInLondon);
 
 
-        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>((List<User>) null,HttpStatus.INTERNAL_SERVER_ERROR);
+        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>((List<User>) null, HttpStatus.INTERNAL_SERVER_ERROR);
 
         Mockito.when(restTemplate.exchange(
-                Mockito.anyString(),Mockito.any(),Mockito.any(),
-                Mockito.any(ParameterizedTypeReference.class),Mockito.any(User[].class))
+                Mockito.anyString(), Mockito.any(), Mockito.any(),
+                Mockito.any(ParameterizedTypeReference.class), Mockito.any(User[].class))
         ).thenThrow(RestClientException.class);
         //Act && Assert
-        assertThrows(RestClientException.class,() -> {
+        assertThrows(RestClientException.class, () -> {
             usersApi.getUsers();
         });
 

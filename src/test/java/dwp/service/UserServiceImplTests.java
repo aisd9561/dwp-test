@@ -1,6 +1,5 @@
 package dwp.service;
 
-import dwp.techtest.TechTestApplication;
 import dwp.techtest.api.UsersApi;
 import dwp.techtest.model.User;
 import dwp.techtest.service.UserServiceImpl;
@@ -10,10 +9,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.boot.test.context.SpringBootTest;
-import static dwp.UserTestData.*;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static dwp.UserTestData.*;
 
 public class UserServiceImplTests {
 
@@ -28,19 +28,19 @@ public class UserServiceImplTests {
 
 
     @BeforeEach
-    void setup(){
+    void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
 
     @Test
-    public void testGetUsersFromLocation_WhenUsersHaveInvalidLocationData(){
+    public void testGetUsersFromLocation_WhenUsersHaveInvalidLocationData() {
         //Arrange
         Mockito.when(usersApi.getUserByCity("London"))
                 .thenReturn(usersWithinLondon);
         Mockito.when(usersApi.getUsers()).thenReturn(usersWithInvalidLocationData);
         //Act
-        List<User> response = userService.getUsersFromLocation("London",Constants.LONDON,50);
+        List<User> response = userService.getUsersFromLocation("London", Constants.LONDON, 50);
 
         //Assert
         Assertions.assertEquals(response, usersWithinLondon);
@@ -48,27 +48,28 @@ public class UserServiceImplTests {
     }
 
     @Test
-    public void testGetUsersFromLocation_WhenAllUsersHaveValidLocationDataNoDuplicates(){
+    public void testGetUsersFromLocation_WhenAllUsersHaveValidLocationDataNoDuplicates() {
         //Arrange
         Mockito.when(usersApi.getUserByCity("London"))
                 .thenReturn(usersWithinLondon);
         Mockito.when(usersApi.getUsers()).thenReturn(usersWithValidLocationDataNoDuplicates);
         //Act
-        List<User> response = userService.getUsersFromLocation("London",Constants.LONDON,50);
+        List<User> response = userService.getUsersFromLocation("London", Constants.LONDON, 50);
 
         //Assert
         Assertions.assertEquals(response, usersInAndAroundLondon);
 
+
     }
 
     @Test
-    public void testGetUsersFromLocation_WhenAllUsersHaveValidLocationDataWithDuplicates(){
+    public void testGetUsersFromLocation_WhenAllUsersHaveValidLocationDataWithDuplicates() {
         //Arrange
         Mockito.when(usersApi.getUserByCity("London"))
                 .thenReturn(usersWithinLondon);
         Mockito.when(usersApi.getUsers()).thenReturn(usersWithValidLocationDataWithDuplicates);
         //Act
-        List<User> response = userService.getUsersFromLocation("London",Constants.LONDON,50);
+        List<User> response = userService.getUsersFromLocation("London", Constants.LONDON, 50);
 
         //Assert
         Assertions.assertEquals(response, usersInAndAroundLondon);
@@ -76,14 +77,14 @@ public class UserServiceImplTests {
     }
 
     @Test
-    public void testGetUsersFromLocation_WhenAllTypesOfUsersReturned(){
+    public void testGetUsersFromLocation_WhenAllTypesOfUsersReturned() {
 
         //Arrange
         Mockito.when(usersApi.getUserByCity("London"))
                 .thenReturn(usersWithinLondon);
         Mockito.when(usersApi.getUsers()).thenReturn(allUsers);
         //Act
-        List<User> response = userService.getUsersFromLocation("London",Constants.LONDON,50);
+        List<User> response = userService.getUsersFromLocation("London", Constants.LONDON, 50);
 
         //Assert
         Assertions.assertEquals(response, usersInAndAroundLondon);
@@ -91,21 +92,22 @@ public class UserServiceImplTests {
     }
 
     @Test
-    public void testGetUsersFromLocation_WhenNullUsersReturnedFromUsersApi(){
+    public void testGetUsersFromLocation_WhenNullUsersReturnedFromUsersApi() {
         //Arrange
 
         Mockito.when(usersApi.getUserByCity("London"))
                 .thenReturn(null);
         Mockito.when(usersApi.getUsers()).thenReturn(null);
         //Act
-        List<User> response = userService.getUsersFromLocation("London",Constants.LONDON,50);
+        List<User> response = userService.getUsersFromLocation("London", Constants.LONDON, 50);
 
         //Assert
-        Assertions.assertEquals(response,null);
+        Assertions.assertEquals(response, null);
 
     }
+
     @Test
-    public void testGetUsersFromLocation_WhenEmptyUsersReturnedFromUsersApi(){
+    public void testGetUsersFromLocation_WhenEmptyUsersReturnedFromUsersApi() {
         //Arrange
         List<User> emptyUsers = new ArrayList<>();
 
@@ -113,22 +115,22 @@ public class UserServiceImplTests {
                 .thenReturn(emptyUsers);
         Mockito.when(usersApi.getUsers()).thenReturn(emptyUsers);
         //Act
-        List<User> response = userService.getUsersFromLocation("London",Constants.LONDON,50);
+        List<User> response = userService.getUsersFromLocation("London", Constants.LONDON, 50);
 
         //Assert
-        Assertions.assertEquals(response,null);
+        Assertions.assertEquals(response, emptyUsers);
 
     }
 
     @Test
-    public void testGetUsersFromLocation_WhenAllUsersIsNullReturnedFromUsersApi(){
+    public void testGetUsersFromLocation_WhenAllUsersIsNullReturnedFromUsersApi() {
         //Arrange
         List<User> emptyUsers = new ArrayList<>();
         Mockito.when(usersApi.getUserByCity("London"))
                 .thenReturn(usersWithinLondon);
         Mockito.when(usersApi.getUsers()).thenReturn(emptyUsers);
         //Act
-        List<User> response = userService.getUsersFromLocation("London",Constants.LONDON,50);
+        List<User> response = userService.getUsersFromLocation("London", Constants.LONDON, 50);
 
         //Assert
         Assertions.assertEquals(response, usersWithinLondon);

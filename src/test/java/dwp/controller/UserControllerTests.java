@@ -1,8 +1,6 @@
 package dwp.controller;
 
 
-import static dwp.UserTestData.*;
-import dwp.techtest.TechTestApplication;
 import dwp.techtest.controller.UserController;
 import dwp.techtest.model.User;
 import dwp.techtest.service.UserServiceImpl;
@@ -14,9 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+
+import static dwp.UserTestData.usersInAndAroundLondon;
 
 public class UserControllerTests {
 
@@ -28,21 +27,21 @@ public class UserControllerTests {
 
 
     @BeforeEach
-    void setup(){
+    void setup() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void getUsersInAndAroundLondon_WhenServiceReturnsUsers(){
+    public void testGetUsersInAndAroundLondon_WhenServiceReturnsUsers() {
 
         //Arrange
-        Mockito.when(userService.getUsersFromLocation("London",Constants.LONDON,50))
+        Mockito.when(userService.getUsersFromLocation("London", Constants.LONDON, 50))
                 .thenReturn(usersInAndAroundLondon);
         //Act
         List<User> response = userController.getUsersInAndAroundLondon();
 
         //Assert
-        Assertions.assertEquals(response,usersInAndAroundLondon);
+        Assertions.assertEquals(response, usersInAndAroundLondon);
 
     }
 }
