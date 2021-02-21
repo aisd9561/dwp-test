@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dwp.UserTestData.userInLondon;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
@@ -39,8 +40,7 @@ public class UsersApiTests {
     public void testGetUsers_OnSuccessfulResponse(){
         //Arrange
         List<User> users = new ArrayList<>();
-        User user1 = new User((long) 1);
-        users.add(user1);
+        users.add(userInLondon);
         ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>(users,HttpStatus.OK);
 
         Mockito.when(restTemplate.exchange(
@@ -59,8 +59,7 @@ public class UsersApiTests {
     public void testGetUsers_OnUnsuccessfulResponse(){
         //Arrange
         List<User> users = new ArrayList<>();
-        User user1 = new User((long) 1);
-        users.add(user1);
+        users.add(userInLondon);
 
         ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>((List<User>) null,HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -79,8 +78,7 @@ public class UsersApiTests {
     public void testGetUsersByCity_OnSuccessfulResponse(){
         //Arrange
         List<User> users = new ArrayList<>();
-        User user1 = new User((long) 1);
-        users.add(user1);
+        users.add(userInLondon);
 
         ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>(users,HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -102,8 +100,8 @@ public class UsersApiTests {
     public void testGetUsersByCity_OnUnsuccessfulResponse(){
         //Arrange
         List<User> users = new ArrayList<>();
-        User user1 = new User((long) 1);
-        users.add(user1);
+        users.add(userInLondon);
+
 
         ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>((List<User>) null,HttpStatus.INTERNAL_SERVER_ERROR);
 

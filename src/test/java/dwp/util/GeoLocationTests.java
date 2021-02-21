@@ -15,12 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.stream.Stream;
 
-@SpringBootTest(classes = TechTestApplication.class)
+import static dwp.util.LocationTestData.*;
+
 public class GeoLocationTests {
 
-    @Autowired
-    GeoLocation geoLocation ;
 
+    GeoLocation geoLocation = new GeoLocation();
 
     @Test
     public void testGetDistance_WhenStartingLocationAndDestinationIsOverFiftyMiles(){
@@ -83,14 +83,6 @@ public class GeoLocationTests {
     }
 
     static Stream<Arguments> location_values()  {
-        Location watford = new Location(51.6613536,-0.440529);
-        Location crawley = new Location(51.1197415,-0.2180565);
-        Location oxford = new Location(51.6465698,0.985909);
-        Location birmingham = new Location(52.4774169,-1.9336706);
-        Location banbury = new Location(52.0068805,-1.5701804);
-        Location blenheim = new Location(51.8467258,-1.3877292);
-        Location nuneham = new Location(51.693465,-1.207614);
-
 
         return Stream.of(
                 Arguments.of("Watford",watford, 17.39 ),
