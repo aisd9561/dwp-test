@@ -54,6 +54,9 @@ public class User {
     @JsonProperty("longitude")
     private Double longitude;
 
+    public User() {
+    }
+
     public Long getId() {
         return id;
     }

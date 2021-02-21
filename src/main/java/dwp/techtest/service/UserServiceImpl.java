@@ -1,10 +1,14 @@
 package dwp.techtest.service;
 
 
+import dwp.techtest.TechTestApplication;
 import dwp.techtest.api.UsersApi;
 import dwp.techtest.model.Location;
 import dwp.techtest.model.User;
 import dwp.techtest.util.GeoLocation;
+import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,9 @@ import java.util.stream.Stream;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Logger LOGGER= LoggerFactory.getLogger(UserServiceImpl.class);
+
+
     @Autowired
     UsersApi usersApi;
 
@@ -25,9 +32,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsersFromLocation(String city,Location location,int maxDistance) {
+        LOGGER.info("fetching users from dwp api ");
         List<User> usersInCity = usersApi.getUserByCity(city);
+        LOGGER.info("retrieved users from by city");
         List<User> allUsers = usersApi.getUsers();
-        if(usersInCity == null && allUsers == null || usersInCity.isEmpty() && allUsers.isEmpty() ){
+        LOGGER.info("retrieved allUsers from by city");
+        LOGGER.debug("users in " + city + " :",usersInCity);
+        LOGGER.debug("all users : ",allUsers);
+        if(usersInCity == null && allUsers == null ){
             return null;
         }
         List<User> usersWithinDistance = getUsersWithinCity(allUsers,location,maxDistance);
@@ -36,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     private List<User> getUsersWithinCity(List<User> allUsers, Location city ,int maxDistance ){
 
-        if( allUsers == null || allUsers.isEmpty()){
+        if( allUsers == null){
             return null;
         }
         List<User> usersWithinDistance = new ArrayList<>();
@@ -44,6 +56,7 @@ public class UserServiceImpl implements UserService {
             Location userLoc = new Location( user.getLatitude(),user.getLongitude());
             Double distance = geoLocation.getDistance(city,userLoc);
             if(distance == null){
+                LOGGER.error("Could not calculate distance for user with ID: " + user.getId() + ". User details: " + user);
                 continue;
             }
             if(distance.doubleValue() <= maxDistance){
