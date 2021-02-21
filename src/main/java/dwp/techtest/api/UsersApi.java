@@ -1,19 +1,17 @@
 package dwp.techtest.api;
 
 import dwp.techtest.model.User;
-import dwp.techtest.util.Endpoints;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.*;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Component
 public class UsersApi {
@@ -21,12 +19,15 @@ public class UsersApi {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${dwp.user.api.baseurl}")
+    private String baseUrl;
+
     public List<User> getUsers() {
         HttpHeaders httpHeaders = new HttpHeaders();
         final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
         ParameterizedTypeReference<List<User>> schemaType = new ParameterizedTypeReference<List<User>>() {
         };
-        String userServiceEndpoint = Endpoints.USERS_ENDPOINT;
+        String userServiceEndpoint = baseUrl+Endpoints.USERS_ENDPOINT;
 
         List<User> users = null;
         try {
@@ -34,7 +35,7 @@ public class UsersApi {
                     restTemplate.exchange(userServiceEndpoint, HttpMethod.GET, entity, schemaType);
             users = res.getBody();
             return users;
-        } catch (RestClientException exception) {
+        } catch (RestClientResponseException exception) {
             throw exception;
         }
 
@@ -45,14 +46,14 @@ public class UsersApi {
         final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
         ParameterizedTypeReference<List<User>> schemaType = new ParameterizedTypeReference<List<User>>() {
         };
-        String cityUsersEndpoint = Endpoints.CITY_USERS_ENDPOINT.replace("{city}", city);
+        String cityUsersEndpoint = baseUrl+Endpoints.CITY_USERS_ENDPOINT.replace("{city}", city);
         List<User> users = null;
         try {
             ResponseEntity<List<User>> res =
                     restTemplate.exchange(cityUsersEndpoint, HttpMethod.GET, entity, schemaType);
             users = res.getBody();
             return users;
-        } catch (RestClientException exception) {
+        } catch (RestClientResponseException exception) {
             throw exception;
         }
 
