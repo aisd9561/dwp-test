@@ -4,22 +4,24 @@ Build an API which calls this API, and returns people who are listed as either l
 - Spring Boot
 - JUnit
 - Geotools
+
+## Run Tests
+```
+mvn test
+```
 ## Build and Run App
 ```
 mvn clean install
 java -jar target/tech-test-0.0.1-SNAPSHOT.jar
 ```
-#OR
+# OR
 ```
 docker build -t adeel-dwp-test .  
 docker run -p 8080:8080 adeel-dwp-test
 ```
-##Run Tests
-```
-mvn test
-```
 
-##API call
+
+## API call
 
 GET ```http://localhost:8080/users/london```
 ```bash
