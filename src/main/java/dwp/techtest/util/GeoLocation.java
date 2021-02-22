@@ -1,18 +1,30 @@
 package dwp.techtest.util;
 
 import dwp.techtest.model.Location;
+import dwp.techtest.service.UserServiceImpl;
 import org.geotools.referencing.GeodeticCalculator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 
 @Component
 public class GeoLocation {
 
-    public static Double getDistance(Location start , Location destination) {
+    private static final Logger LOGGER= LoggerFactory.getLogger(UserServiceImpl.class);
+
+    public Double getDistance(Location start , Location destination) {
         GeodeticCalculator gc = new GeodeticCalculator();
-        gc.setStartingGeographicPoint(start.getLongitude(),start.getLatitude());
-        gc.setDestinationGeographicPoint(destination.getLongitude(), destination.getLatitude());
-        double distance = gc.getOrthodromicDistance();
+        double distance = 0.00;
+        try {
+            gc.setStartingGeographicPoint(start.getLongitude(),start.getLatitude());
+            gc.setDestinationGeographicPoint(destination.getLongitude(), destination.getLatitude());
+            distance = gc.getOrthodromicDistance();
+        }catch(Exception e){
+            LOGGER.warn("Unable to calculate distance." +  e.getMessage());
+            return null;
+        }
+
         double distanceInMiles = convertMetersToMiles(distance);
         return distanceInMiles;
 

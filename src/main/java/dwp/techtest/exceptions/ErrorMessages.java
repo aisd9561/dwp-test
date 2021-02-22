@@ -6,6 +6,7 @@ public enum ErrorMessages {
     USER_SERVICE_ERROR("User service error");
 
 
+
     private String errorMessage;
 
     ErrorMessages(String errorMessage) {

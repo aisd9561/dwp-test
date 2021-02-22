@@ -1,17 +1,15 @@
 package dwp.techtest.exceptions;
 
 
-import org.springframework.http.HttpStatus;
-
 import java.util.Date;
 
 public class ApiError {
     private Date timestamp;
-    private HttpStatus status;
+    private int status;
     private ErrorMessages message;
     private Object details;
 
-    public ApiError(HttpStatus status, ErrorMessages message, Object details) {
+    public ApiError(int status, ErrorMessages message, Object details) {
         this.timestamp = new Date();
         this.status = status;
         this.message = message;
@@ -26,11 +24,11 @@ public class ApiError {
         this.timestamp = timestamp;
     }
 
-    public HttpStatus getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(HttpStatus status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
