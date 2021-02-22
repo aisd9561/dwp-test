@@ -4,6 +4,7 @@ Build an API which calls this API, and returns people who are listed as either l
 - Spring Boot
 - JUnit
 - Geotools
+- Swagger
 
 ### Run Tests
 ```
@@ -20,6 +21,10 @@ docker build -t adeel-dwp-test .
 docker run -p 8080:8080 adeel-dwp-test
 ```
 
+### Swagger specification
+```
+http://localhost:8080/swagger-ui/
+```
 
 ### API call
 
@@ -27,3 +32,7 @@ GET ```http://localhost:8080/users/london```
 ```bash
 curl -X GET "http://localhost:8080/users/london" -H "accept: application/json"
 ```
+
+
+
+
