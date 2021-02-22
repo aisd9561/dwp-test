@@ -1,8 +1,6 @@
 package dwp.techtest.exceptions;
 
 
-import org.springframework.http.HttpStatus;
-
 import java.util.Date;
 
 public class ApiError {
