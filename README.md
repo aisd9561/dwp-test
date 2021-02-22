@@ -1,9 +1,9 @@
 ## Task
 Build an API which calls this API, and returns people who are listed as either living in London, or whose current coordinates are within 50 miles of London.
 ## Dependencies
-Spring Boot
-JUnit
-Geotools
+- Spring Boot
+- JUnit
+- Geotools
 ## Build and Run App
 ```
 mvn clean install
