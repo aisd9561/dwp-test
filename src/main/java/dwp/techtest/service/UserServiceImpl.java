@@ -32,9 +32,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsersFromLocation(String city,Location location,int maxDistance) {
         LOGGER.info("fetching users from dwp api ");
         List<User> usersInCity = usersApi.getUserByCity(city);
-        LOGGER.info("retrieved users from by city");
+        LOGGER.info("retrieved users by city");
         List<User> allUsers = usersApi.getUsers();
-        LOGGER.info("retrieved allUsers from by city");
+        LOGGER.info("retrieved allUsers.");
         LOGGER.debug("users in " + city + " :",usersInCity);
         LOGGER.debug("all users : ",allUsers);
         if(usersInCity == null && allUsers == null ){
@@ -77,6 +77,8 @@ public class UserServiceImpl implements UserService {
                         .flatMap(List::stream)
                         .collect(Collectors.toMap(User::getId, d -> d, (User x, User y) -> x == null ? y : x))
                         .values());
+
+        LOGGER.info("removed duplicates.");
 
         return filteredList;
 
