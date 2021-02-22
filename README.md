@@ -21,7 +21,7 @@ docker run -p 8080:8080 adeel-dwp-test
 ```
 
 
-# API call
+### API call
 
 GET ```http://localhost:8080/users/london```
 ```bash
