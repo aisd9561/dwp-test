@@ -25,5 +25,5 @@ docker run -p 8080:8080 adeel-dwp-test
 
 GET ```http://localhost:8080/users/london```
 ```bash
-$ curl -X GET "http://localhost:8080/users/london" -H "accept: application/json"
+curl -X GET "http://localhost:8080/users/london" -H "accept: application/json"
 ```
