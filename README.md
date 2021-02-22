@@ -14,7 +14,7 @@ mvn test
 mvn clean install
 java -jar target/tech-test-0.0.1-SNAPSHOT.jar
 ```
-# OR
+OR
 ```
 docker build -t adeel-dwp-test .  
 docker run -p 8080:8080 adeel-dwp-test
