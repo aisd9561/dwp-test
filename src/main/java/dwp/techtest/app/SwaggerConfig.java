@@ -1,4 +1,4 @@
-package dwp.techtest;
+package dwp.techtest.app;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

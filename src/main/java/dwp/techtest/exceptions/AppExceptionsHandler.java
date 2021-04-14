@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.RestClientResponseException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 
 @ControllerAdvice
@@ -21,6 +22,13 @@ public class AppExceptionsHandler {
     public ResponseEntity handleHttpStatusCodeException(RestClientResponseException e) {
         System.out.println(e);
         ApiError apiError = new ApiError(e.getRawStatusCode(), ErrorMessages.USER_SERVICE_ERROR,e.getResponseBodyAsString());
+        return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.resolve(e.getRawStatusCode()));
+    }
+
+    @ExceptionHandler(WebClientResponseException.class)
+    public ResponseEntity handleWebClientException(WebClientResponseException e) {
+        System.out.println(e);
+        ApiError apiError = new ApiError(e.getRawStatusCode(), ErrorMessages.USER_SERVICE_ERROR,e.getMessage());
         return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.resolve(e.getRawStatusCode()));
     }
 
