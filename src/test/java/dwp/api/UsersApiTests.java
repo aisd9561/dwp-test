@@ -5,16 +5,11 @@ import dwp.techtest.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,31 +18,38 @@ import static dwp.UserTestData.userInLondon;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
+
 public class UsersApiTests {
 
     @Mock
-    private RestTemplate restTemplate;
+    private WebClient webClient;
 
     @InjectMocks
     private UsersApi usersApi;
 
+    WebClient.RequestHeadersUriSpec uriSpecMock = Mockito.mock(WebClient.RequestHeadersUriSpec.class);
+    WebClient.RequestHeadersSpec headersSpecMock = Mockito.mock(WebClient.RequestHeadersSpec.class);
+    WebClient.ResponseSpec responseSpecMock = Mockito.mock(WebClient.ResponseSpec.class);
+    ParameterizedTypeReference<List<User>> schemaType = new ParameterizedTypeReference<List<User>>() {
+    };
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
+        Mockito.when(webClient.get()).thenReturn(uriSpecMock);
+        Mockito.when(uriSpecMock.uri(ArgumentMatchers.<String>notNull())).thenReturn(headersSpecMock);
+        Mockito.when(headersSpecMock.retrieve()).thenReturn(responseSpecMock);
     }
 
     @Test
-    public void testGetUsers_OnSuccessfulResponse() {
+    public void testWebClient_GetUsers_OnSuccessfulResponse() {
         //Arrange
         List<User> users = new ArrayList<>();
         users.add(userInLondon);
-        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>(users, HttpStatus.OK);
 
-        Mockito.when(restTemplate.exchange(
-                Mockito.anyString(), Mockito.any(), Mockito.any(),
-                Mockito.any(ParameterizedTypeReference.class), Mockito.any(User[].class))
-        ).thenReturn(mockResponse);
+        Mockito.when(responseSpecMock.bodyToMono( schemaType ))
+                .thenReturn(Mono.just(users));
+
         //Act
         List<User> res = usersApi.getUsers();
 
@@ -57,65 +59,50 @@ public class UsersApiTests {
     }
 
     @Test
-    public void testGetUsers_OnUnsuccessfulResponse() {
+    public void testWebClientGetUsers_OnUnsuccessfulResponse() {
         //Arrange
         List<User> users = new ArrayList<>();
         users.add(userInLondon);
 
-        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>((List<User>) null, HttpStatus.INTERNAL_SERVER_ERROR);
-
-        Mockito.when(restTemplate.exchange(
-                Mockito.anyString(), Mockito.any(), Mockito.any(),
-                Mockito.any(ParameterizedTypeReference.class), Mockito.any(User[].class))
-        ).thenThrow(RestClientResponseException.class);
+        Mockito.when(responseSpecMock.bodyToMono( schemaType ))
+                .thenThrow(WebClientResponseException.class);
         //Act && Assert
-        assertThrows(RestClientResponseException.class, () -> {
+        assertThrows(WebClientResponseException.class, () -> {
             usersApi.getUsers();
         });
-
 
     }
 
     @Test
-    public void testGetUsersByCity_OnSuccessfulResponse() {
+    public void testWebClientGetUsersByCity_OnSuccessfulResponse() {
         //Arrange
         List<User> users = new ArrayList<>();
         users.add(userInLondon);
 
-        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>(users, HttpStatus.INTERNAL_SERVER_ERROR);
+        Mockito.when(responseSpecMock.bodyToMono( schemaType ))
+                .thenReturn(Mono.just(users));
 
-        Mockito.when(restTemplate.exchange(
-                Mockito.anyString(), Mockito.any(), Mockito.any(),
-                Mockito.any(ParameterizedTypeReference.class), Mockito.any(User[].class))
-        ).thenReturn(mockResponse);
         //Act
         List<User> res = usersApi.getUserByCity("city");
 
         //Assert
         Assertions.assertEquals(res, users);
 
-
     }
 
     @Test
-    public void testGetUsersByCity_OnUnsuccessfulResponse() {
+    public void testWebClientGetUsersByCity_OnUnsuccessfulResponse() {
         //Arrange
         List<User> users = new ArrayList<>();
         users.add(userInLondon);
 
+        Mockito.when(responseSpecMock.bodyToMono( schemaType ))
+                .thenThrow(WebClientResponseException.class);
 
-        ResponseEntity<List<User>> mockResponse = new ResponseEntity<List<User>>((List<User>) null, HttpStatus.INTERNAL_SERVER_ERROR);
-
-        Mockito.when(restTemplate.exchange(
-                Mockito.anyString(), Mockito.any(), Mockito.any(),
-                Mockito.any(ParameterizedTypeReference.class), Mockito.any(User[].class))
-        ).thenThrow(RestClientException.class);
         //Act && Assert
-        assertThrows(RestClientException.class, () -> {
-            usersApi.getUsers();
+        assertThrows(WebClientResponseException.class, () -> {
+            usersApi.getUserByCity("");
         });
-
-
     }
 
 
