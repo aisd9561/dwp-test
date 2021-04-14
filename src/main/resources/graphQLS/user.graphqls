@@ -1,0 +1,15 @@
+type User{
+    id: ID!
+    firstName: String!
+    lastName:String!
+    email:String!
+    ipAddress:String!
+    latitude:Float!
+    longitude:Float!
+}
+
+
+type Query {
+    getUsers : [User]
+    getUserByCity(city: String!): [User]
+}
