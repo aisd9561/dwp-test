@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestClientResponseException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -18,27 +16,29 @@ import java.util.List;
 public class UsersApi {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private WebClient webClient;
 
     @Value("${dwp.user.api.baseurl}")
     private String baseUrl;
+
 
     public List<User> getUsers() {
         HttpHeaders httpHeaders = new HttpHeaders();
         final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
         ParameterizedTypeReference<List<User>> schemaType = new ParameterizedTypeReference<List<User>>() {
         };
-        String userServiceEndpoint = baseUrl+Endpoints.USERS_ENDPOINT;
 
+        String userServiceEndpoint = baseUrl+Endpoints.USERS_ENDPOINT ;
         List<User> users = null;
-        try {
-            ResponseEntity<List<User>> res =
-                    restTemplate.exchange(userServiceEndpoint, HttpMethod.GET, entity, schemaType);
-            users = res.getBody();
-            return users;
-        } catch (RestClientResponseException exception) {
-            throw exception;
-        }
+        Mono<List<User>> apiResponse = webClient
+                .get()
+                .uri(userServiceEndpoint)
+                .retrieve()
+                .bodyToMono(schemaType)
+                .onErrorMap(error -> error);
+
+        users = apiResponse.block();
+        return users;
 
     }
 
@@ -48,15 +48,18 @@ public class UsersApi {
         ParameterizedTypeReference<List<User>> schemaType = new ParameterizedTypeReference<List<User>>() {
         };
         String cityUsersEndpoint = baseUrl+Endpoints.CITY_USERS_ENDPOINT.replace("{city}", city);
+
         List<User> users = null;
-        try {
-            ResponseEntity<List<User>> res =
-                    restTemplate.exchange(cityUsersEndpoint, HttpMethod.GET, entity, schemaType);
-            users = res.getBody();
-            return users;
-        } catch (RestClientResponseException exception) {
-            throw exception;
-        }
+
+        Mono<List<User>> apiResponse = webClient
+                .get()
+                .uri(cityUsersEndpoint)
+                .retrieve()
+                .bodyToMono(schemaType)
+                .onErrorMap(error -> error);
+
+        users = apiResponse.block();
+        return users;
 
     }
 

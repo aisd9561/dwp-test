@@ -1,7 +1,6 @@
 package dwp.techtest.util;
 
 import dwp.techtest.model.Location;
-import dwp.techtest.service.UserServiceImpl;
 import org.geotools.referencing.GeodeticCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GeoLocation {
 
-    private static final Logger LOGGER= LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger LOGGER= LoggerFactory.getLogger(GeoLocation.class);
 
     public Double getDistance(Location start , Location destination) {
         GeodeticCalculator gc = new GeodeticCalculator();
