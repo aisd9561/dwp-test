@@ -1,6 +1,7 @@
 package dwp.techtest.api;
 
 import dwp.techtest.model.User;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -21,7 +22,7 @@ public class UsersApi {
     @Value("${dwp.user.api.baseurl}")
     private String baseUrl;
 
-
+    @Timed(value = "dwp.getUsers", description = "Time taken to return all users")
     public List<User> getUsers() {
         HttpHeaders httpHeaders = new HttpHeaders();
         final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
@@ -42,6 +43,7 @@ public class UsersApi {
 
     }
 
+    @Timed(value = "dwp.getUserByCity", description = "Time taken to return users by city")
     public List<User> getUserByCity(String city) {
         HttpHeaders httpHeaders = new HttpHeaders();
         final HttpEntity<String> entity = new HttpEntity<>(httpHeaders);

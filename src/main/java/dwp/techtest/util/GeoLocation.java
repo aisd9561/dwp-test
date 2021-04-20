@@ -1,6 +1,7 @@
 package dwp.techtest.util;
 
 import dwp.techtest.model.Location;
+import io.micrometer.core.annotation.Timed;
 import org.geotools.referencing.GeodeticCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ public class GeoLocation {
 
     private static final Logger LOGGER= LoggerFactory.getLogger(GeoLocation.class);
 
+    @Timed(value = "geolocation.getDistance", description = "Time taken to for geolocation to get distance.")
     public Double getDistance(Location start , Location destination) {
         GeodeticCalculator gc = new GeodeticCalculator();
         double distance = 0.00;

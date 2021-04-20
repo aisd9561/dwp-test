@@ -5,6 +5,7 @@ import dwp.techtest.api.UsersApi;
 import dwp.techtest.model.Location;
 import dwp.techtest.model.User;
 import dwp.techtest.util.GeoLocation;
+import io.micrometer.core.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     GeoLocation geoLocation;
 
-
+    @Timed(value = "getUsersFromLocation", description = "Time taken to process call 2 apis & process data.")
     @Override
     public List<User> getUsersFromLocation(String city,Location location,int maxDistance) {
         LOGGER.info("fetching users from dwp api ");
